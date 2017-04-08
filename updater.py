@@ -29,7 +29,7 @@ import getpass
 import re
 import updater_rc
 
-VERSION = "0.0.1-21"
+VERSION = "0.0.1-22"
 start = datetime.now()
 last_run = start
 delay = 0
@@ -192,12 +192,14 @@ class SystemTrayIcon(QtGui.QSystemTrayIcon):
             self.UU_disable = self.menu.addAction("Disable Unattended Upgrades")
         self.check_now = self.menu.addAction("Check updates Now")
         self.update_apt = self.menu.addAction("Refresh apt db Now")
+        self.show_version = self.menu.addAction("Version")
         self.exit_action = self.menu.addAction("Exit")
 
         if UU_status:
             self.UU_disable.triggered.connect(self.disable_uu)
         self.check_now.triggered.connect(check_updates_now)
         self.update_apt.triggered.connect(self.update_apt_now)
+        self.show_version.triggered.connect(self.display_verion)
         self.exit_action.triggered.connect(get_out)
 
         self.setContextMenu(self.menu)
@@ -212,6 +214,9 @@ class SystemTrayIcon(QtGui.QSystemTrayIcon):
         self.connect(self.get_thread, self.get_thread.disable_menu, self.set_busy)
         self.get_thread.start()
         self.set_busy()
+
+    def display_verion(self):
+        QtGui.QMessageBox.information(QtGui.QMessageBox(), 'Version', 'Dai\'s Apt Updater\n'+str(VERSION), QtGui.QMessageBox.Ok)
 
     def disable_uu(self):
         result = False
